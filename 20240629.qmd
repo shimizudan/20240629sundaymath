@@ -13,7 +13,7 @@ format:
 
  ![](https://shimizudan.github.io/20240225-2sundaymath/pic29.png)
 
-__2024年6月29日　#30 日曜数学会__
+__2024年6月29日　#30 日曜数学会・JuliaTokai #19__
 
 - 東京都板橋区 城北中学校・高等学校 に数学科の教員として勤務。2021年度より教頭です。
 - 今回の発表は2024年6月9日に足立学園で行われた「男子中フェスタ　授業体験」の中で実施された内容です。
@@ -45,6 +45,22 @@ __2024年6月29日　#30 日曜数学会__
  ![](https://shimizudan.github.io/20240629sundaymath/pic694.png)
 
 **全部で何通りありのか？→今回もJulia言語を用いて調べてみます！**
+
+{{< pagebreak >}}
+
+
+# Julia言語のについて
+
+今回，すべての場合を調べるのに`julia`言語を利用しました。
+
+ [https://julialang.org](https://julialang.org)
+
+ ![](https://shimizudan.github.io/20240225-2sundaymath/pic24.png)
+
+Juliaは統計処理や科学技術計算、機械学習に強いプログラミング言語といわれています。 例えばStatsBase.jlやDistributions.jlなどのパッケージを使用すると、統計モデリングや仮説検定、回帰分析、時系列分析などの統計処理を行えます。
+
+また，[quarto](https://quarto.org)というパブリッシング・システムを用いてWebページを作成しました。基本`Markdown`で，コードの読み込みも容易です。今回は利用していませんが，新たな数式処理の[typst](https://typst.app)も実装可能です。
+
 
 {{< pagebreak >}}
 
