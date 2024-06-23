@@ -22,13 +22,32 @@ __2024年6月29日　#30 日曜数学会__
 {{< pagebreak >}}
 
 
-# まずは4x4の正方形を2つの合同な図形に分割してみよう！
+# 4x4の正方形を2つの合同な図形に分割してみよう
 
- ![](https://shimizudan.github.io/20240629sundaymath/pic619.png)
+## ルール説明
+ ![](https://shimizudan.github.io/20240629sundaymath/pic691.png)
+
+{{< pagebreak >}}
+
+## 参加した子供達と探す
+ ![](https://shimizudan.github.io/20240629sundaymath/pic692.png)
+
+{{< pagebreak >}}
 
 
 # 6x6の正方形を2つの合同な図形に分割してみよう
 
+## いろいろ探してみよう！
+ ![](https://shimizudan.github.io/20240629sundaymath/pic693.png)
+
+{{< pagebreak >}}
+
+## 参加した子供達の作品
+ ![](https://shimizudan.github.io/20240629sundaymath/pic694.png)
+
+**全部で何通りありのか？→今回もJulia言語を用いて調べてみます！**
+
+{{< pagebreak >}}
 
 ## 成分が0と1の6x6の正方行列を作る
 
