@@ -1,0 +1,324 @@
+---
+title: "6x6の正方形を2つの合同な図形に分割してみよう！"
+author: "清水　団　Dan Shimizu ([@dannchu](https://twitter.com/dannchu)) "
+date: "6/29/2024"
+jupyter: julia-1.10
+format:
+  html:
+    toc: true
+    toc-location: right
+---
+# はじめに（自己紹介）
+
+
+ ![](https://shimizudan.github.io/20240225-2sundaymath/pic29.png)
+
+__2024年6月29日　#30 日曜数学会__
+
+- 東京都板橋区 城北中学校・高等学校 に数学科の教員として勤務
+- 2021年度より教頭です。
+- 今回の発表は2024年6月9日に足立学園で行われた「男子中フェスタ　授業体験」の中で実施された内容です。
+
+{{< pagebreak >}}
+
+
+# まずは4x4の正方形を2つの合同な図形に分割してみよう！
+
+ ![](https://shimizudan.github.io/20240629sundaymath/pic619.png)
+
+
+# 6x6の正方形を2つの合同な図形に分割してみよう
+
+
+## 成分が0と1の6x6の正方行列を作る
+
+何も考えずに，0と1の成分の正方行列を作ると，約687億個の行列をチェックしなくてはなりません。これを調べるのはこれは厳しいです。だいたい，億を超えると厳しいです。
+
+$$2^{36}=68,719,476,736$$
+
+36個の成分で0と1が半分ずつ(18個ずつ)です。これで絞ってみます。約90億個となりました。少し減りましたが，億を超えてますね。
+
+$${}_{36}\text{C}_{18}=9,075,135,300$$
+
+今回の分け方「2つの合同な図形」を考えると，行列の成分は点対称になります。なので，半分の18個の成分を決めれば，あとは定まります。約26万個となり，これなら計算できそうです！
+
+$$2^{18}=262,144$$
+
+さらに，[1,1]成分を1に限定すれば，半分の約13万個となります。
+
+$$\dfrac{262,144}{2} = 131,072$$
+
+{{< pagebreak >}}
+
+- 組み合わせパッケージ`Combinatorics.jl`を読み込み
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+using Combinatorics
+
+```
+
+
+- 0と1の成分を用意する。（A）
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+A = [0,1]
+
+```
+
+
+{{< pagebreak >}}
+
+- 0と1を合計6個並べた「列」を$2^6=64$個用意する。(B)
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+B =[]
+for x ∈ A , y ∈ A, z ∈ A, u ∈ A, v ∈ A, w ∈ A
+    push!(B,[x,y,z,u,v,w])
+end
+B
+```
+
+
+{{< pagebreak >}}
+
+- Bからランダムに3列作る。
+- [1,1]成分は1とする。
+- 行列は点対称となるのでランダムな3列を180度回転し，1と0を入れ替える。(C)
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+C =[]
+for x ∈ B , y ∈ B, z ∈ B
+    X = [x y z ]
+    if X[1,1] == 1
+        Y = mod.(X .+1,2) |> rot180
+        push!(C,[X Y])
+    end
+end
+C
+```
+
+
+
+{{< pagebreak >}}
+
+## 領域が連結しているかをチェック
+
+このあとは，2つの合同な図形に分かれるということは，[1,1]の成分1から，1である18個の成分すべてが連結していなくてなりません。これをチェックすることにします。
+
+- 領域が連結どのくらい連結しているか調べる関数`conti_18`を作成
+- [1,1]成分と同じ色が何個連結しているかを調べる。
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+function conti_18(A::Matrix) #6x6の行列を入力　各成分は0,1
+    k = A[1,1] # [1,1]成分
+    Pack = [[1,1]] #連結する成分を加えていく
+    t = 1 # パラメータ
+    x = 18 # パラメータ
+    while  t != x
+        for i = 1:6,j=1:6
+            if A[i,j] == k 
+                if  [i-1,j] in Pack ||[i+1,j] in Pack ||[i,j-1] in Pack ||[i,j+1] in Pack  
+                    push!(Pack,[i,j]) 
+                end
+            end
+        end
+        x = t
+        t = Pack |> union |>length
+    end
+    P = Pack |> union
+end
+```
+
+{{< pagebreak >}}
+
+
+- 領域が18個続いているものだけを残す。(D)
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+D = []
+for X in C
+    if conti_18(X) |> length == 18
+        push!(D,X)
+    end
+end
+
+D
+```
+
+
+だいぶん減りましたね。1018個です。
+{{< pagebreak >}}
+
+
+## 回転・折り返しで重複をチェック
+
+1,018個を見たところ，90度回転や折り返しで重なるものがあったのでそれらを除きます。(Dを置き直し)
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+X =[]
+for i =  1:length(D)-1 , j = i+1:length(D)
+    if D[i] == rotr90(D[j]) #右90度回転
+        push!(X,D[i])
+    elseif D[i] == rotl90(D[j]) #左90度回転
+        push!(X,D[i])
+    elseif D[i] == rotl90(D[j]') #左右折り返し
+        push!(X,D[i])
+    end
+
+end
+
+D = setdiff(D,X)
+```
+
+
+
+255通りです。これで，重複はなさそうです！
+
+{{< pagebreak >}}
+
+## 図示の準備
+
+
+- 描画パッケージ`Plots.jl`を読み込み
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+using Plots
+```
+
+- 正方形のマス目のデータ作成する関数`rect_number`を作る。
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+function rect_number(x::Int,y::Int)
+    xval = [x-1,x,x,x-1,x-1]
+    yval = [y-1,y-1,y,y,y-1]
+    return xval,yval
+end
+```
+
+{{< pagebreak >}}
+
+- 6x6のマス目の塗る関数`draw_rect`を作る。
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+# 
+function draw_rect(A::Matrix , n=6 , k=0)
+    plot(label=false,xlim=(0,n),ylim=(0,n),aspectratio=true,showaxis=false,framestyle=:box,ticks=0:1:n)
+    for i = 1:n ,j = 1:n
+        if mod(A[i,j],2) == 0
+            plot!(rect_number(i,j),fill=true,color=:royalblue,label=false,alpha=.5) 
+        else
+            plot!(rect_number(i,j),fill=true,color=:Brown3,label=false,alpha=.5) 
+        end
+     end
+    plot!(title = k)
+end
+```
+
+{{< pagebreak >}}
+
+## ギャラリー
+### 1~50
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+plt = []
+
+for  i =1:50
+    push!(plt, draw_rect(D[i],6,i))
+end
+
+plot(plt...,layout=(10,5),size=(800,2400))
+```
+
+{{< pagebreak >}}
+
+
+### 51~100
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+plt = []
+
+for  i =51:100
+    push!(plt, draw_rect(D[i],6,i))
+end
+
+plot(plt...,layout=(10,5),size=(800,2400))
+```
+
+{{< pagebreak >}}
+
+### 101~150
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+plt = []
+
+for  i =101:150
+    push!(plt, draw_rect(D[i],6,i))
+end
+
+plot(plt...,layout=(10,5),size=(800,2400))
+```
+
+{{< pagebreak >}}
+
+### 151~200
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+plt = []
+
+for  i =151:200
+    push!(plt, draw_rect(D[i],6,i))
+end
+
+plot(plt...,layout=(10,5),size=(800,2400))
+```
+
+{{< pagebreak >}}
+
+### 201~255
+
+```{julia}
+#| code-fold: true
+#| code-summary: "Show the code"
+plt = []
+
+for  i =201:255
+    push!(plt, draw_rect(D[i],6,i))
+end
+
+plot(plt...,layout=(11,5),size=(800,2400))
+```
+
+{{< pagebreak >}}
+
+
+
+
+
