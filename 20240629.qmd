@@ -379,7 +379,7 @@ plot(plt...,layout=(11,5),size=(800,2400))
 
  [https://oeis.org/A113900](https://oeis.org/A113900)
 
-![](https://shimizudan.github.io/20240225-2sundaymath/pic6260.png)
+![](https://shimizudan.github.io/20240629sundaymath/pic6260.png)
 
 {{< pagebreak >}}
 
