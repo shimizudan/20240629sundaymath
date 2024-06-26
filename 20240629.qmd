@@ -367,7 +367,19 @@ plot(plt...,layout=(11,5),size=(800,2400))
 
 {{< pagebreak >}}
 
+# あとがき
+
+- 2x2のときは1通り
+- 4x4のときは6通り
+- 6x6のときは255通り
 
 
+だったので，オンライン整数大辞典で「1,6,255」と入れてみたところ・・・ありました。
 
+
+ [https://oeis.org/A113900](https://oeis.org/A113900)
+
+![](https://shimizudan.github.io/20240225-2sundaymath/pic6260.png)
+
+{{< pagebreak >}}
 
