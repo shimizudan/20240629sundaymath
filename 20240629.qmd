@@ -11,7 +11,7 @@ format:
 
 本日の内容のサイトはこちらです。（QRコード）
 
-![](https://shimizudan.github.io/20240225-2sundaymath/QR6237.png)
+![](https://shimizudan.github.io/20240629sundaymath/QR6237.png)
 
 {{< pagebreak >}}
 
