@@ -8,6 +8,13 @@ format:
     toc: true
     toc-location: right
 ---
+
+本日の内容のサイトはこちらです。（QRコード）
+
+![](https://shimizudan.github.io/20240225-2sundaymath/QR6237.png)
+
+{{< pagebreak >}}
+
 # はじめに（自己紹介）
 
 
